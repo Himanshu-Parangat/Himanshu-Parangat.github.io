@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Himanshu Parangat</title>
+  <style>
+    :root {
+      --color-accent: #ffbade;
+      --color-secondry-accent: #74deff;
+      --color-text: #ffffff;
+      --color-highlight: #201f31;
+      --primary-fg: #ccc;
+      --secondary-fg: #6c757d;
+      --primary-bg: #201f31;
+      --secondary-bg: #2b2a3c;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: var(--primary-bg);
+      color: var(--color-text);
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    h1 {
+      color: var(--color-accent);
+      text-shadow: 2px 2px var(--color-highlight);
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      z-index: 10;
+    }
+
+    p {
+      color: var(--primary-fg);
+      font-size: 1.2rem;
+      z-index: 10;
+    }
+
+    .shape {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+			background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+      cursor: grab;
+      user-select: none;
+      transition: background 0.3s;
+    }
+
+    .shape:active {
+      cursor: grabbing;
+      background: var(--color-second-accent);
+    }
+
+		.collider {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+		}
+
+  </style>
+
+</head>
+<body>
+
+		<div class="collider">
+			<img src="https://media1.tenor.com/m/kkSR7zQfUQgAAAAd/kyaru-priconne.gif" alt="neko sip stare", style="width: 200px; height: auto; border-radius: 4px">
+			<h1>This is my Website</h1>
+			<p>I Will add somthing soon here.</p>
+		</div>
+
+
+  <script>
+    const gravityDirections = [
+      { x: 0, y: 1 },   // down
+      { x: 1, y: 0 },   // right
+      { x: 0, y: -1 },  // up
+      { x: -1, y: 0 }   // left
+    ];
+    let currentGravity = 0;
+
+
+    setInterval(() => {
+      currentGravity = (currentGravity + 1) % gravityDirections.length;
+    }, 5000);
+
+
+		const blockTypes = [
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/diamond_ore.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/end_stone.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/redstone_block.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/obsidian.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/stone.png', count: 5 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/hay_block_side.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/deepslate/deepslate.png', count: 2 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/dirt.png', count: 4 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/ice.png', count: 1 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/snow.png', count: 1 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/planks_birch.png', count: 1 },
+			{ url: 'https://raw.githubusercontent.com/Mojang/bedrock-samples/refs/heads/main/resource_pack/textures/blocks/glass.png', count: 1 },
+		];
+
+		const blockTextures = [];
+
+		blockTypes.forEach(block => {
+			for (let i = 0; i < block.count; i++) {
+				blockTextures.push(block.url);
+			}
+		});
+
+
+
+    const shapeCount = 15;
+    const shapes = [];
+
+    for (let i = 0; i < shapeCount; i++) {
+      const shape = document.createElement('div');
+      shape.className = 'shape';
+      shape.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+      shape.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+
+
+			shape.style.backgroundImage = `url(${blockTextures[Math.floor(Math.random() * blockTextures.length)]})`;
+
+      document.body.appendChild(shape);
+
+      shapes.push({
+        el: shape,
+        velocityX: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1),
+        velocityY: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1),
+        isDragging: false,
+        offsetX: 0,
+        offsetY: 0
+      });
+
+
+      shape.addEventListener('mousedown', (e) => {
+        const s = shapes[i];
+        s.isDragging = true;
+        s.offsetX = e.clientX - shape.offsetLeft;
+        s.offsetY = e.clientY - shape.offsetTop;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        const s = shapes[i];
+        if (s.isDragging) {
+          shape.style.left = (e.clientX - s.offsetX) + 'px';
+          shape.style.top = (e.clientY - s.offsetY) + 'px';
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        shapes[i].isDragging = false;
+      });
+    }
+
+		const collider = document.querySelector('.collider');
+
+		function animate() {
+			const colliderRect = collider.getBoundingClientRect();
+
+			shapes.forEach((s) => {
+				if (!s.isDragging) {
+					let shape = s.el;
+					let rect = shape.getBoundingClientRect();
+
+					s.velocityX += gravityDirections[currentGravity].x * 0.2;
+					s.velocityY += gravityDirections[currentGravity].y * 0.2;
+
+					let newLeft = rect.left + s.velocityX;
+					let newTop = rect.top + s.velocityY;
+
+					if (newLeft <= 0) {
+						newLeft = 0;
+						s.velocityX *= -0.9;
+					} else if (newLeft + rect.width >= window.innerWidth) {
+						newLeft = window.innerWidth - rect.width;
+						s.velocityX *= -0.8;
+					}
+
+					if (newTop <= 0) {
+						newTop = 0;
+						s.velocityY *= -0.8;
+					} else if (newTop + rect.height >= window.innerHeight) {
+						newTop = window.innerHeight - rect.height;
+						s.velocityY *= -0.8;
+					}
+
+					if (
+						rect.right > colliderRect.left &&
+						rect.left < colliderRect.right &&
+						rect.bottom > colliderRect.top &&
+						rect.top < colliderRect.bottom
+					) {
+						const overlapLeft = rect.right - colliderRect.left;
+						const overlapRight = colliderRect.right - rect.left;
+						const overlapTop = rect.bottom - colliderRect.top;
+						const overlapBottom = colliderRect.bottom - rect.top;
+
+						const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+						if (minOverlap === overlapLeft) {
+							newLeft -= overlapLeft;
+							s.velocityX *= -0.3;
+						} else if (minOverlap === overlapRight) {
+							newLeft += overlapRight;
+							s.velocityX *= -0.3;
+						} else if (minOverlap === overlapTop) {
+							newTop -= overlapTop;
+							s.velocityY *= -0.3;
+						} else if (minOverlap === overlapBottom) {
+							newTop += overlapBottom;
+							s.velocityY *= -0.3;
+						}
+					}
+
+					shape.style.left = newLeft + 'px';
+					shape.style.top = newTop + 'px';
+				}
+			});
+
+			requestAnimationFrame(animate);
+		}
+
+		animate()
+  </script>
+	<script>
+		setTimeout(() => {
+			location.reload();
+		}, 15000);
+  </script>
+
+</body>
+</html>
