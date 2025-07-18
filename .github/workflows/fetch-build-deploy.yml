@@ -3,14 +3,16 @@ name: Fecth Build And Deploy to GitHub Pages
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
-  build:
+  checkout:
     runs-on: ubuntu-latest
+
     steps:
-      - name: show vaiables
-        run: echo "foo"
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/${{ secrets.TARGET_REPO_NAME }}
+          token: ${{ secrets.PAT }}
+
+      - name: List files
+        run: ls -la
