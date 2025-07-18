@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug checkout info
+        run: echo "Cloning repo ${{ github.repository_owner }}/${{ secrets.TARGET_REPO_NAME }}"
+
       - name: Checkout private repo
         uses: actions/checkout@v4
         with:
