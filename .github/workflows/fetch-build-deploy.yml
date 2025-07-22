@@ -1,0 +1,21 @@
+name: Fecth Build And Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Debug checkout info
+        run: echo "Cloning repo ${{ github.repository_owner }}/${{ secrets.TARGET_REPO_NAME }}"
+
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/${{ secrets.TARGET_REPO_NAME }}
+          token: ${{ secrets.PAT }}
+
+      - name: List files
+        run: ls -la
